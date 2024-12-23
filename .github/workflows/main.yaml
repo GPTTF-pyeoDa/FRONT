@@ -9,6 +9,7 @@ on:
       - "!.github/workflows/main.yaml"
       - "!.gitignore"
       - "!public/**"
+      - "!*.css"
 
 permissions:
   pull-requests: write
