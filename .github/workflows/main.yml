@@ -4,12 +4,7 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
     paths:
-      - "!package.json"
-      - "!package-lock.json"
-      - "!.github/workflows/main.yaml"
-      - "!.gitignore"
-      - "!public/**"
-      - "!*.css"
+      - "src/**"
 
 permissions:
   pull-requests: write
