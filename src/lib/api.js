@@ -119,3 +119,31 @@ export const updatePostById = async (id, updateData) => {
     return null;
   }
 };
+
+// AI
+/**
+ * 사용자가 작성한 글에 대해 AI 피드백 요청
+ * @param {string} id - 글의 ID
+ * @param {string} content - 사용자가 작성한 글 내용
+ * @returns {Promise<Feedback>} - AI 피드백 내용
+ */
+export const requestFeedback = async (id, content) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}/feedback`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to generate feedback");
+    }
+    return await response.json(); // AI 피드백 텍스트 반환
+  } catch (error) {
+    console.error("Error generating feedback:", error.message);
+    throw error; // 에러를 상위로 전달
+  }
+};

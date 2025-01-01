@@ -5,7 +5,7 @@ import { Logo } from "@/components/Logo";
 import { fetchTodaysTag } from "@/lib/api";
 
 export default async function Home() {
-  const todayTopic = await fetchTodaysTag();
+  const todayTag = await fetchTodaysTag();
 
   return (
     <div className="min-h-screen bg-blue-50 p-8 text-blue-900">
@@ -36,13 +36,13 @@ export default async function Home() {
             className="text-blue-900 hover:text-blue-900 border-blue-200 hover:bg-blue-100 h-32 text-xl font-noto-sans"
           >
             <Link
-              href={`/write?id=${todayTopic.id}&name=${todayTopic.name}`}
+              href={`/write?id=${todayTag.id}&name=${todayTag.name}`}
               className="flex flex-col items-center justify-center"
             >
               <h2 className="mb-3 text-2xl font-semibold">
                 오늘의 글감:{" "}
                 <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                  {todayTopic.name}
+                  {todayTag.name}
                 </span>
               </h2>
               <p className="m-0 max-w-[30ch] text-sm opacity-50">

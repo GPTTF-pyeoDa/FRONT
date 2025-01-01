@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { PenTool, Trash2, Lock, Unlock, Bot } from "lucide-react";
 import { Hashtag } from "@/components/Hashtag";
-import { fetchPostById, deletePostById } from "@/lib/api";
+import { fetchPostById, deletePostById, requestFeedback } from "@/lib/api";
 
 interface Post {
   id: string;
@@ -15,13 +15,22 @@ interface Post {
   isPublic: boolean;
   tagName?: string;
 }
+interface Feedback {
+  grammar: string[];
+  spacing: string[];
+  context: string[];
+  suggestion: string;
+}
 
 export default function PostPage() {
   const router = useRouter();
   const { id } = useParams(); // URL에서 id 가져오기
 
   const [post, setPost] = useState<Post | null>(null);
+
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [loading, setLoading] = useState(true);
+  const [feedbackLoading, setFeedbackLoading] = useState(false); // AI 피드백 로딩 상태
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -73,9 +82,17 @@ export default function PostPage() {
     console.log("Toggling public status", post.id, !post.isPublic);
   };
 
-  const handleAICoach = () => {
-    // 여기에 AI 코치 로직을 구현하세요
-    console.log("Requesting AI coaching for", post.id);
+  const handleAICoach = async () => {
+    if (!post) return;
+    setFeedbackLoading(true);
+    try {
+      const result = await requestFeedback(post.id, post.content); // API 호출
+      setFeedback(result.feedback); // 피드백 설정
+    } catch (err) {
+      alert("AI 피드백 요청 실패: " + (err as Error).message);
+    } finally {
+      setFeedbackLoading(false);
+    }
   };
 
   return (
@@ -130,11 +147,55 @@ export default function PostPage() {
             onClick={handleAICoach}
             variant="outline"
             className="bg-white text-purple-500 hover:bg-purple-50 border-purple-200"
+            disabled={feedbackLoading} // 로딩 중일 때 버튼 비활성화
           >
             <Bot className="mr-2 h-4 w-4" />
-            AI 글쓰기 코치
+            {feedbackLoading ? "피드백 생성 중..." : "AI 글쓰기 코치"}
           </Button>
         </div>
+        {feedback && (
+          <div className="mt-8 space-y-6">
+            <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg">
+              <h2 className="text-lg font-medium text-gray-700 mb-2">
+                문법 피드백
+              </h2>
+              <ul className="list-disc pl-5 space-y-1">
+                {feedback.grammar?.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-4 bg-green-50 border border-green-100 rounded-lg">
+              <h2 className="text-lg font-medium text-gray-700 mb-2">
+                띄어쓰기 피드백
+              </h2>
+              <ul className="list-disc pl-5 space-y-1">
+                {feedback.spacing?.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-4 bg-yellow-50 border border-yellow-100 rounded-lg">
+              <h2 className="text-lg font-medium text-gray-700 mb-2">
+                맥락 피드백
+              </h2>
+              <ul className="list-disc pl-5 space-y-1">
+                {feedback.context?.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-4 bg-purple-50 border border-purple-100 rounded-lg">
+              <h2 className="text-lg font-medium text-gray-700 mb-2">
+                수정된 예시
+              </h2>
+              <p className="text-gray-600">{feedback.suggestion}</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
