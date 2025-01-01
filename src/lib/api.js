@@ -66,3 +66,18 @@ export const fetchMyPosts = async (memID) => {
     return [];
   }
 };
+
+export const fetchPostById = async (id) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/post/${id}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch post");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching post:", error.message);
+    return null;
+  }
+};
