@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Lock, Unlock, BarChart2 } from "lucide-react";
 import { fetchMyPosts } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface Post {
   id: string;
@@ -18,12 +20,21 @@ export default function MyPostsPage() {
   const [posts, setPosts] = useState<Post[]>([]); // 타입 지정
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      router.push("/auth/login"); // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
+    }
+  }, [user, router]);
 
   useEffect(() => {
     const loadPosts = async () => {
       setLoading(true);
       try {
-        const userId = "test02"; // 실제 로그인 사용자 ID를 여기에 설정
+        const userId = user?.memID; // 실제 로그인 사용자 ID를 여기에 설정
         const data = await fetchMyPosts(userId);
         setPosts(data);
       } catch (err) {
@@ -38,6 +49,7 @@ export default function MyPostsPage() {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-blue-50 p-8 text-blue-900">

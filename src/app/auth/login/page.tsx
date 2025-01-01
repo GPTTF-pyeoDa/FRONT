@@ -6,8 +6,17 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Logo";
+import { useAuth } from "@/context/AuthContext";
+import { jwtDecode } from "jwt-decode";
+
+interface DecodedToken {
+  memID: string; // memID
+  name: string;
+  email: string;
+}
 
 export default function LoginPage() {
+  const { setUser } = useAuth();
   const [memID, setMemID] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -33,6 +42,8 @@ export default function LoginPage() {
 
     // JWT 토큰을 로컬 스토리지에 저장
     localStorage.setItem("token", data.token);
+    const decodedToken: DecodedToken = jwtDecode(data.token);
+    setUser({ memID: decodedToken.memID, name: decodedToken.name });
 
     // 로그인 성공 후 메인 페이지로 이동
     router.push("/");
