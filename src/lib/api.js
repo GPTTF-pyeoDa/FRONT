@@ -30,3 +30,22 @@ export const fetchTodaysTag = async () => {
     return;
   }
 };
+
+export const createPost = async (postData) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(postData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create post");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error creating post:", error.message);
+    return null;
+  }
+};
