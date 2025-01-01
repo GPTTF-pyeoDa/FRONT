@@ -18,16 +18,16 @@ export default async function AllTopicsPage() {
       </header>
 
       <main>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {tags.map((tag: Tag) => (
             <Card
               key={tag.id}
-              className="bg-white hover:bg-blue-100 transition-colors"
+              className="bg-white hover:bg-blue-100 transition-colors h-24"
             >
-              <CardContent className="p-4">
+              <CardContent className="p-4 h-full flex items-center justify-center">
                 <Link
                   href={`/write?id=${tag.id}&name=${tag.name}`}
-                  className="text-blue-700 hover:text-blue-800"
+                  className="text-blue-700 hover:text-blue-800 text-center"
                 >
                   {tag.name}
                 </Link>
