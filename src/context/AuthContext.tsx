@@ -11,6 +11,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,8 +58,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     verifyUser();
   }, []);
 
+  const logout = () => {
+    localStorage.removeItem("token"); // 로컬 스토리지에서 토큰 삭제
+    setUser(null); // 인증 상태 초기화
+    alert("로그아웃 되었습니다.");
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

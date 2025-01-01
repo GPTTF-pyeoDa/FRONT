@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { PenTool, List, BarChart2 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { fetchTodaysTag } from "@/lib/api";
+import { AuthButtons } from "@/components/AuthButtons";
 
 export default async function Home() {
   const todayTag = await fetchTodaysTag();
@@ -93,24 +94,7 @@ export default async function Home() {
       </main>
 
       <footer className="mt-12 text-center">
-        <div className="space-x-4">
-          <Button
-            asChild
-            variant="ghost"
-            size="sm"
-            className="text-blue-900 hover:text-blue-900 font-noto-sans"
-          >
-            <Link href="/auth/login">로그인</Link>
-          </Button>
-          <Button
-            asChild
-            variant="ghost"
-            size="sm"
-            className="text-blue-900 hover:text-blue-900 font-noto-sans"
-          >
-            <Link href="/auth/signup">회원가입</Link>
-          </Button>
-        </div>
+        <AuthButtons />
       </footer>
     </div>
   );
