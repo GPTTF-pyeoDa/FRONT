@@ -50,7 +50,7 @@ export default function PostPage() {
   if (!post) return <p>No post data available.</p>;
 
   const handleEdit = () => {
-    // router.push(`/write?edit=${post.id}`);
+    router.push(`/write/${post.id}`);
   };
 
   const handleDelete = async () => {

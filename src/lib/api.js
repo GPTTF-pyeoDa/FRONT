@@ -99,3 +99,23 @@ export const deletePostById = async (id) => {
     return null;
   }
 };
+
+export const updatePostById = async (id, updateData) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateData),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to update post");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating post:", error.message);
+    return null;
+  }
+};
