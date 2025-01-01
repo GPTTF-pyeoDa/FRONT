@@ -81,3 +81,21 @@ export const fetchPostById = async (id) => {
     return null;
   }
 };
+
+export const deletePostById = async (id) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to delete post");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error deleting post:", error.message);
+    return null;
+  }
+};

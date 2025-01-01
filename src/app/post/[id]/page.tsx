@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { PenTool, Trash2, Lock, Unlock, Bot } from "lucide-react";
 import { Hashtag } from "@/components/Hashtag";
-import { fetchPostById } from "@/lib/api";
+import { fetchPostById, deletePostById } from "@/lib/api";
 
 interface Post {
   id: string;
@@ -53,10 +53,18 @@ export default function PostPage() {
     // router.push(`/write?edit=${post.id}`);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     // 여기에 삭제 로직을 구현하세요
-    console.log("Deleting post", post.id);
-    // router.push("/post");
+    const confirmed = confirm("정말 삭제하시겠습니까?");
+    if (!confirmed) return;
+
+    try {
+      await deletePostById(post?.id ?? "");
+      alert("글이 삭제되었습니다.");
+      router.push("/post/mypost");
+    } catch (err) {
+      alert("삭제 실패: " + (err as Error).message);
+    }
   };
 
   const togglePublic = () => {
