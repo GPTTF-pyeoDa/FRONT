@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PenTool, List, BarChart2 } from "lucide-react";
-import { Logo } from "@/components/Logo";
 import { fetchTodaysTag } from "@/lib/api";
 import { AuthButtons } from "@/components/AuthButtons";
 
@@ -10,14 +9,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-blue-50 p-8 text-blue-900">
-      <header className="mb-12 text-center">
-        <Logo />
-        <h1 className="text-4xl font-semibold text-blue-900 mt-4">
-          나만의 글쓰기 공간
-        </h1>
-      </header>
-
-      <main className="max-w-4xl mx-auto">
+      <main className="max-w-4xl mx-auto mt-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Button
             asChild

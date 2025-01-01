@@ -60,9 +60,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-blue-50 flex flex-col justify-center items-center p-8">
-      <Logo />
-      <h1 className="text-3xl font-semibold text-blue-800 mt-8 mb-8">로그인</h1>
+    <div className="min-h-[92vh] bg-blue-50 flex flex-col justify-center items-center p-8">
+      <h1 className="text-3xl font-semibold text-blue-800 mb-8">로그인</h1>
       <form onSubmit={handleLogin} className="w-full max-w-md space-y-4">
         <Input
           type="text"
