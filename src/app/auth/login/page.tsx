@@ -24,29 +24,39 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ memID, password }),
-    });
-    console.log(res);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ memID, password }),
+        }
+      );
 
-    const data = await res.json();
+      const data = await response.json();
 
-    if (!res.ok) {
-      return alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
+      if (!response.ok) {
+        throw new Error(data.message || "로그인에 실패했습니다.");
+      }
+
+      // JWT 토큰을 로컬 스토리지에 저장
+      localStorage.setItem("token", data.token);
+
+      // 토큰에서 사용자 정보 추출
+      const decodedToken = jwtDecode<DecodedToken>(data.token);
+      setUser({
+        memID: decodedToken.memID,
+        name: decodedToken.name,
+      });
+
+      alert("로그인이 완료되었습니다.");
+      router.push("/");
+    } catch (error) {
+      alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
     }
-    alert("로그인이 완료되었습니다.");
-
-    // JWT 토큰을 로컬 스토리지에 저장
-    localStorage.setItem("token", data.token);
-    const decodedToken: DecodedToken = jwtDecode(data.token);
-    setUser({ memID: decodedToken.memID, name: decodedToken.name });
-
-    // 로그인 성공 후 메인 페이지로 이동
-    router.push("/");
   };
 
   return (
