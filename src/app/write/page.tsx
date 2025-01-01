@@ -1,20 +1,29 @@
 // 새 글 작성 또는 기존 글 수정
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { PenTool, Image, Lock, Unlock, Save } from "lucide-react";
 import { createPost } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function WritePage() {
+  const { user } = useAuth();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [tagId, setTagId] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      router.push("/auth/login"); // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
+    }
+  }, [user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +36,7 @@ export default function WritePage() {
       title,
       content,
       isPublic,
-      memID: "test02", // 실제 로그인 사용자 ID 사용
+      memID: user?.memID, // 실제 로그인 사용자 ID 사용
       tagId,
     };
 

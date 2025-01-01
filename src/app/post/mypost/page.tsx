@@ -59,26 +59,30 @@ export default function MyPostsPage() {
 
       <main>
         <div className="space-y-4">
-          {posts.map((post, index) => (
-            <Card key={post.id} className="bg-white">
-              <CardContent className="p-4 flex justify-between items-center">
-                <Link
-                  href={`/post/${post.id}`}
-                  className="text-blue-700 hover:text-blue-800"
-                >
-                  {post.title}
-                </Link>
-                <div className="flex space-x-2">
-                  {post.isPublic ? (
-                    <Unlock className="h-5 w-5 text-green-500" />
-                  ) : (
-                    <Lock className="h-5 w-5 text-gray-500" />
-                  )}
-                  <BarChart2 className="h-5 w-5 text-blue-500" />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <Card key={post.id} className="bg-white">
+                <CardContent className="p-4 flex justify-between items-center">
+                  <Link
+                    href={`/post/${post.id}`}
+                    className="text-blue-700 hover:text-blue-800"
+                  >
+                    {post.title}
+                  </Link>
+                  <div className="flex space-x-2">
+                    {post.isPublic ? (
+                      <Unlock className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <Lock className="h-5 w-5 text-gray-500" />
+                    )}
+                    <BarChart2 className="h-5 w-5 text-blue-500" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <p>작성한 글이 없습니다.</p>
+          )}
         </div>
       </main>
     </div>
