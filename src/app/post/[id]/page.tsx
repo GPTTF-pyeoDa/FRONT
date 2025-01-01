@@ -13,6 +13,7 @@ interface Post {
   content: string;
   createdAt: string;
   isPublic: boolean;
+  tagId?: string;
   tagName?: string;
 }
 interface Feedback {
@@ -103,7 +104,7 @@ export default function PostPage() {
         </h1>
         <div className="flex items-center space-x-4 mb-6">
           <p className="text-gray-500">작성일: {post.createdAt}</p>
-          {post.tagName && <Hashtag topic={post.tagName} />}
+          {post.tagName && <Hashtag id={post.tagId} name={post.tagName} />}
           <span
             className={`px-2 py-1 rounded-full text-sm ${
               post.isPublic

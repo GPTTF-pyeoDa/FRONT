@@ -1,16 +1,17 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 interface HashtagProps {
-  topic: string;
+  id?: string;
+  name?: string;
 }
 
-export function Hashtag({ topic }: HashtagProps) {
+export function Hashtag({ id, name }: HashtagProps) {
   return (
     <Link
-      href={`/topic/${topic}`}
-      className='inline-block bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2 hover:bg-blue-200 transition-colors'
+      href={`/topic/${id}?name=${name}`}
+      className="inline-block bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2 hover:bg-blue-200 transition-colors"
     >
-      #{topic}
+      #{name}
     </Link>
   );
 }

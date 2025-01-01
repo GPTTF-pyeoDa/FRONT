@@ -120,6 +120,26 @@ export const updatePostById = async (id, updateData) => {
   }
 };
 
+/**
+ * 특정 글감에 대한 글 목록 가져오기
+ * @param {string} tagId - 글감 ID
+ * @returns {Promise<Post[]>} - 글 목록
+ */
+export const fetchPostsByTag = async (tagId) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/tag/${tagId}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch posts by tag");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching posts by tag:", error.message);
+    throw error;
+  }
+};
+
 // AI
 /**
  * 사용자가 작성한 글에 대해 AI 피드백 요청

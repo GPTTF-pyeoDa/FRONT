@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { PenTool, Image, Lock, Unlock, Save } from "lucide-react";
-import { Hashtag } from "@/components/Hashtag";
 import { fetchPostById, updatePostById } from "@/lib/api";
 
 export default function WritePage() {
