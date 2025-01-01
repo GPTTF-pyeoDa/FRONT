@@ -26,7 +26,7 @@ export default async function AllTopicsPage() {
             >
               <CardContent className="p-4">
                 <Link
-                  href={`/write?topic=${tag.id}`}
+                  href={`/write?id=${tag.id}&name=${tag.name}`}
                   className="text-blue-700 hover:text-blue-800"
                 >
                   {tag.name}

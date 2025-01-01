@@ -1,4 +1,4 @@
-// 새 글 작성 또는 기존 글 수정
+// 새 글 작성
 "use client";
 
 import { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { PenTool, Image, Lock, Unlock, Save } from "lucide-react";
 import { createPost } from "@/lib/api";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function WritePage() {
@@ -17,13 +17,21 @@ export default function WritePage() {
   const [isPublic, setIsPublic] = useState(false);
   const [tagId, setTagId] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (!user) {
       alert("로그인이 필요합니다.");
       router.push("/auth/login"); // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
     }
-  }, [user, router]);
+
+    const tagId = searchParams.get("id");
+    const tagName = searchParams.get("name");
+    if (tagId) {
+      setTagId(tagId);
+      setTitle(`${tagName}`);
+    }
+  }, [user, router, searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +44,7 @@ export default function WritePage() {
       title,
       content,
       isPublic,
-      memID: user?.memID, // 실제 로그인 사용자 ID 사용
+      memID: user?.memID,
       tagId,
     };
 

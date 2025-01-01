@@ -36,7 +36,7 @@ export default async function Home() {
             className="text-blue-900 hover:text-blue-900 border-blue-200 hover:bg-blue-100 h-32 text-xl font-noto-sans"
           >
             <Link
-              href={`/write?topic=${todayTopic.id}`}
+              href={`/write?id=${todayTopic.id}&name=${todayTopic.name}`}
               className="flex flex-col items-center justify-center"
             >
               <h2 className="mb-3 text-2xl font-semibold">
