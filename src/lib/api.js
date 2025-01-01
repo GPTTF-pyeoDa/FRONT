@@ -1,3 +1,4 @@
+// tag
 export const fetchTags = async () => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tags`);
@@ -31,6 +32,7 @@ export const fetchTodaysTag = async () => {
   }
 };
 
+// post
 export const createPost = async (postData) => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
@@ -47,5 +49,20 @@ export const createPost = async (postData) => {
   } catch (error) {
     console.error("Error creating post:", error.message);
     return null;
+  }
+};
+
+export const fetchMyPosts = async (memID) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/${memID}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch posts");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching posts:", error.message);
+    return [];
   }
 };

@@ -69,7 +69,7 @@ export default async function Home() {
             className="text-blue-900 hover:text-blue-900 border-blue-200 hover:bg-blue-100 h-32 text-xl font-noto-sans"
           >
             <Link
-              href="/post"
+              href="/post/mypost"
               className="flex flex-col items-center justify-center"
             >
               <List className="h-8 w-8 mb-2" />

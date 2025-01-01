@@ -7,12 +7,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { PenTool, Image, Lock, Unlock, Save } from "lucide-react";
 import { createPost } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 export default function WritePage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [tagId, setTagId] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +34,7 @@ export default function WritePage() {
     const response = await createPost(postData);
     if (response) {
       alert("글이 작성되었습니다!");
+      router.push(`/post/mypost`);
     }
   };
 
