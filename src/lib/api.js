@@ -140,6 +140,31 @@ export const fetchPostsByTag = async (tagId) => {
   }
 };
 
+/**
+ * 특정 글의 공개/비공개 상태를 토글
+ * @param {string} id - 글 ID
+ * @returns {Promise<{ id: string, isPublic: boolean }>} - 업데이트된 상태 반환
+ */
+export const togglePostPublic = async (id) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}/toggle-public`,
+      {
+        method: "PATCH",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to toggle post public status");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error toggling post public status:", error.message);
+    throw error;
+  }
+};
+
 // AI
 /**
  * 사용자가 작성한 글에 대해 AI 피드백 요청

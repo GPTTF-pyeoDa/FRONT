@@ -5,7 +5,12 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { PenTool, Trash2, Lock, Unlock, Bot } from "lucide-react";
 import { Hashtag } from "@/components/Hashtag";
-import { fetchPostById, deletePostById, requestFeedback } from "@/lib/api";
+import {
+  fetchPostById,
+  deletePostById,
+  requestFeedback,
+  togglePostPublic,
+} from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 
 interface Post {
@@ -35,6 +40,7 @@ export default function PostPage() {
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [loading, setLoading] = useState(true);
   const [feedbackLoading, setFeedbackLoading] = useState(false); // AI 피드백 로딩 상태
+  const [updating, setUpdating] = useState(false); // 공개/비공개 상태 변경 로딩 상태
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -67,7 +73,6 @@ export default function PostPage() {
   };
 
   const handleDelete = async () => {
-    // 여기에 삭제 로직을 구현하세요
     const confirmed = confirm("정말 삭제하시겠습니까?");
     if (!confirmed) return;
 
@@ -80,10 +85,22 @@ export default function PostPage() {
     }
   };
 
-  const togglePublic = () => {
-    // setPost((prev) => (prev ? { ...prev, isPublic: !prev.isPublic } : prev));
-    // 여기에 공개/비공개 전환 로직을 구현하세요
-    console.log("Toggling public status", post.id, !post.isPublic);
+  const handleTogglePublic = async () => {
+    if (!post) return;
+    setUpdating(true);
+    try {
+      const updated = await togglePostPublic(post.id);
+      setPost((prev) =>
+        prev ? { ...prev, isPublic: updated.isPublic } : prev
+      ); // 상태 업데이트
+      alert(`글이 ${updated.isPublic ? "공개" : "비공개"}로 설정되었습니다.`);
+    } catch (err) {
+      alert(
+        "공개/비공개 상태 변경 중 문제가 발생했습니다." + (err as Error).message
+      );
+    } finally {
+      setUpdating(false);
+    }
   };
 
   const handleAICoach = async () => {
@@ -137,16 +154,21 @@ export default function PostPage() {
               삭제
             </Button>
             <Button
-              onClick={togglePublic}
+              onClick={handleTogglePublic}
               variant="outline"
               className="bg-white text-[#3B82F6] hover:bg-[#F8FAFC] border-[#E2E8F0]"
+              disabled={updating}
             >
               {post.isPublic ? (
                 <Unlock className="mr-2 h-4 w-4" />
               ) : (
                 <Lock className="mr-2 h-4 w-4" />
               )}
-              {post.isPublic ? "비공개로 전환" : "공개로 전환"}
+              {updating
+                ? "변경 중..."
+                : post.isPublic
+                ? "비공개로 전환"
+                : "공개로 전환"}
             </Button>
             <Button
               onClick={handleAICoach}
