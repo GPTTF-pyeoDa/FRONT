@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/Logo";
 import { useAuth } from "@/context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 

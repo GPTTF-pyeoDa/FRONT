@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PenTool, Trash2, Lock, Unlock, Bot } from "lucide-react";
 import { Hashtag } from "@/components/Hashtag";
 import { fetchPostById, deletePostById, requestFeedback } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 interface Post {
   id: string;
@@ -13,6 +14,7 @@ interface Post {
   content: string;
   createdAt: string;
   isPublic: boolean;
+  memID: string;
   tagId?: string;
   tagName?: string;
 }
@@ -24,6 +26,7 @@ interface Feedback {
 }
 
 export default function PostPage() {
+  const { user } = useAuth();
   const router = useRouter();
   const { id } = useParams(); // URL에서 id 가져오기
 
@@ -116,44 +119,46 @@ export default function PostPage() {
           </span>
         </div>
         <p className="text-gray-700 mb-8 whitespace-pre-wrap">{post.content}</p>
-        <div className="flex flex-wrap gap-4">
-          <Button
-            onClick={handleEdit}
-            className="bg-[#F0F7FF] text-[#3B82F6] hover:bg-[#E5F1FF] border-[#BFD9FE]"
-          >
-            <PenTool className="mr-2 h-4 w-4" />
-            수정
-          </Button>
-          <Button
-            onClick={handleDelete}
-            variant="outline"
-            className="bg-white text-red-500 hover:bg-red-50 border-red-200"
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            삭제
-          </Button>
-          <Button
-            onClick={togglePublic}
-            variant="outline"
-            className="bg-white text-[#3B82F6] hover:bg-[#F8FAFC] border-[#E2E8F0]"
-          >
-            {post.isPublic ? (
-              <Unlock className="mr-2 h-4 w-4" />
-            ) : (
-              <Lock className="mr-2 h-4 w-4" />
-            )}
-            {post.isPublic ? "비공개로 전환" : "공개로 전환"}
-          </Button>
-          <Button
-            onClick={handleAICoach}
-            variant="outline"
-            className="bg-white text-purple-500 hover:bg-purple-50 border-purple-200"
-            disabled={feedbackLoading} // 로딩 중일 때 버튼 비활성화
-          >
-            <Bot className="mr-2 h-4 w-4" />
-            {feedbackLoading ? "피드백 생성 중..." : "AI 글쓰기 코치"}
-          </Button>
-        </div>
+        {user && user.memID === post.memID && (
+          <div className="flex flex-wrap gap-4">
+            <Button
+              onClick={handleEdit}
+              className="bg-[#F0F7FF] text-[#3B82F6] hover:bg-[#E5F1FF] border-[#BFD9FE]"
+            >
+              <PenTool className="mr-2 h-4 w-4" />
+              수정
+            </Button>
+            <Button
+              onClick={handleDelete}
+              variant="outline"
+              className="bg-white text-red-500 hover:bg-red-50 border-red-200"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              삭제
+            </Button>
+            <Button
+              onClick={togglePublic}
+              variant="outline"
+              className="bg-white text-[#3B82F6] hover:bg-[#F8FAFC] border-[#E2E8F0]"
+            >
+              {post.isPublic ? (
+                <Unlock className="mr-2 h-4 w-4" />
+              ) : (
+                <Lock className="mr-2 h-4 w-4" />
+              )}
+              {post.isPublic ? "비공개로 전환" : "공개로 전환"}
+            </Button>
+            <Button
+              onClick={handleAICoach}
+              variant="outline"
+              className="bg-white text-purple-500 hover:bg-purple-50 border-purple-200"
+              disabled={feedbackLoading} // 로딩 중일 때 버튼 비활성화
+            >
+              <Bot className="mr-2 h-4 w-4" />
+              {feedbackLoading ? "피드백 생성 중..." : "AI 글쓰기 코치"}
+            </Button>
+          </div>
+        )}
         {feedback && (
           <div className="mt-8 space-y-6">
             <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg">
